@@ -121,6 +121,7 @@ static void vint(void)
         Z80_disableBusProtection();
     }
     JOY_update();
+    in_latch |= JOY_readJoypad(JOY_1) & ~(BUTTON_UP | BUTTON_DOWN | BUTTON_LEFT | BUTTON_RIGHT);   /* D-pad is not latched: it would make movement coast */
     snd_tick();
 }
 
@@ -276,6 +277,9 @@ void vid_init(void)
     /* plane B is never used: point it at a zeroed area so that colour 0 pixels of
        plane A (which are transparent) do not show a second, differently scrolled copy */
     VDP_setBGBAddress(0xC000);
+    /* the sprite attribute table also goes there: sprites are never used, and the SGDK default
+       location (0xF400) lies inside our tile data, which showed up as a stray 8x8 sprite */
+    VDP_setSpriteListAddress(0xC000);
     {
         vu32 *ctrl = (vu32 *)VDP_CTRL_PORT;
         vu16 *data = (vu16 *)VDP_DATA_PORT;

@@ -197,7 +197,7 @@ boolean Save_Read(s16 slot)
     gametype gs;
     objtype tmp;
     u8 rk[NUM_LEVELS], rs[NUM_LEVELS], rt[NUM_LEVELS];
-    u16 rtm[8], pw[5];
+    u16 rtm[NUM_LEVELS], pw[5];
 
     /* verify the checksum first */
     SRAM_enableRO();
