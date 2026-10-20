@@ -1,10 +1,12 @@
 # Zillion 3D for the Sega Genesis / Mega Drive
 
-A port of Zillion 3D (the Wolfenstein 3D mod featuring *Akai Koudan Zillion* characters,
-ModDB file `Zillion_3D_SDL.rar`) to the Sega Genesis / Mega Drive, written in C for SGDK (68000)
-and built on [wolf-3d-md](https://github.com/haroldo-ok/wolf-3d-md).
+A port of **moonkey's [*Zillion 3D*](https://moonkey.itch.io/zillion-3d)** — the *Wolfenstein 3D* mod
+featuring characters, art, and music inspired by the anime *Akai Koudan Zillion* — to the
+Sega Genesis / Mega Drive, written in C for SGDK (68000) and built on
+[wolf-3d-md](https://github.com/haroldo-ok/wolf-3d-md).
 
-ROM: `Zillion3D_Genesis.bin` (`out/rom.bin`, ~3.88 MB aligned image, 32 KB battery SRAM declared in header).
+- **Original PC mod:** *Zillion 3D* by [moonkey](https://moonkey.itch.io/zillion-3d) (<https://moonkey.itch.io/zillion-3d>)
+- **ROM:** `Zillion3D_Genesis.bin` (`out/rom.bin`, ~3.88 MB aligned image, 32 KB battery SRAM declared in header)
 
 ## Controls
 - **D-pad:** move forward/back, turn left/right
@@ -13,7 +15,7 @@ ROM: `Zillion3D_Genesis.bin` (`out/rom.bin`, ~3.88 MB aligned image, 32 KB batte
 - **Start:** pause menu (New Game, Sound, Control, Load/Save Game, Read This!, View Scores, Back to Game)
 
 ## Performance & Bug Fixes (v0.0.2)
-- **Precompiled 68000 column scalers (`tools/scalers.py`, `src/gen/scalers.c`):** replaces the runtime per-pixel fixed-point loop with straight-line generated 68000 machine code across 321 height steps (`0..512`). Uses 12-cycle `(a0)` / `(a0)+` indirect moves and `lea d16(a0),a0` skips to run ~25% faster per wall column while saving ~61 KB of ROM (`136,536` bytes total), keeping the full 20-level ROM comfortably below the 4 MB cartridge limit without bank switching.
+- **Precompiled 68000 column scalers (`tools/scalers.py`, `src/gen/scalers.c`):** replaces the runtime per-pixel fixed-point loop with straight-line generated 68000 machine code across 321 height steps (`0..512`). Uses 12-cycle `(a0)` / `(a0)+` indirect moves and `lea d16(a0),a0` skips to run ~25% faster per wall column while saving ~61 KB of ROM (`136,536` bytes total), keeping all 20 levels comfortably below the 4 MB cartridge limit without bank switching.
 - **Ray interpolation (`src/render.c`):** skips casting odd columns when adjacent even rays hit the exact same `(tile, postsource)` wall column within `|H_left - H_right| <= 2`.
 - **Faster distance math & DDA stepping (`src/render.c`):** replaces 32-bit `FixedByFrac` projection math with 16-bit signed hardware multiplies (`muls`) and keeps pre-shifted `xtile << 6` + signed 16-bit map indices (`s16`) for single-instruction `d8(An,Dn.w)` 68000 indexed lookups.
 - **Incremental floor/ceiling clear & tighter HUD weapon blitter (`src/render.c`):** fills only newly exposed rows between frames (`prev_ClearTop` / `prev_ClearBot`) and trims transparent spans on weapon sprites.
@@ -27,11 +29,11 @@ ROM: `Zillion3D_Genesis.bin` (`out/rom.bin`, ~3.88 MB aligned image, 32 KB batte
 - **Episode 2 hallway walk + doors + combat (1,000 vblanks):** **6.59 fps** (up from ~4.85 fps, **+35.9%**)
 
 ## What was converted from the mod's own data (no placeholders)
-- Walls, sprites, pictures, fonts, help/end texts: from the mod's `VSWAP.WL6`, `VGAGRAPH.WL6`, `VGAHEAD.WL6`, `VGADICT.WL6`.
-- All 20 levels (`Zillion3D_E1_L1` .. `Zillion3D_E2_L10`) from `GAMEMAPS.WL6` / `MAPHEAD.WL6`.
+- Walls, sprites, pictures, fonts, help/end texts: from *Zillion 3D*'s `VSWAP.WL6`, `VGAGRAPH.WL6`, `VGAHEAD.WL6`, `VGADICT.WL6` (<https://moonkey.itch.io/zillion-3d>).
+- All 20 levels (2 episodes of 10 levels each, `Zillion3D_E1_L1` .. `Zillion3D_E2_L10`) from `GAMEMAPS.WL6` / `MAPHEAD.WL6`.
 - 48 digitised sound effects and the 27 IMF music tracks from `AUDIOT.WL6` / `AUDIOHED.WL6`.
 - Per-level ceiling colour, par time and music are read from the id Software WL6 source tables
-  (`vgaCeiling`, `parTimes`, `songs`), which the mod's Wolf4SDL executable uses.
+  (`vgaCeiling`, `parTimes`, `songs`), matching the Wolf4SDL build used by the mod.
 
 ## Changes made for two episodes
 - New Game asks for the episode first ("Episode 1" / "Episode 2"), then difficulty.
@@ -62,7 +64,7 @@ Requirements: an SGDK tree (`GDK`), an m68k GCC (`gcc-m68k-linux-gnu`, GCC 14.2)
 Java for `rescomp`/`sizebnd.jar`, and Python 3 with `numpy` and `Pillow`.
 
 1. Build the SGDK helpers and library with the same toolchain (`sjasm`, `bintos`, `convsym`, then `make -f makelib.gen GDK=. PREFIX=m68k-elf- release`).
-2. Regenerate the assets (needs the Zillion `.WL6` files and the id Software `wolf3d` source tree for the palette and name tables):
+2. Regenerate the assets (needs *Zillion 3D*'s `.WL6` files from <https://moonkey.itch.io/zillion-3d> and the id Software `wolf3d` source tree for the palette and name tables):
    ```sh
    python3 -I tools/convert.py <dir with Zillion .WL6 files> <wolf3d id source dir> .
    ```
@@ -77,4 +79,8 @@ Java for `rescomp`/`sizebnd.jar`, and Python 3 with `numpy` and `Pillow`.
    ./tools/fps.sh out/rom.bin
    ```
 
-Credits: Wolfenstein 3D (c) id Software; Zillion 3D by smokingsimon; Akai Koudan Zillion characters (c) their owners. Unofficial fan port.
+## Credits
+- *Zillion 3D* mod by **[moonkey](https://moonkey.itch.io/zillion-3d)** (<https://moonkey.itch.io/zillion-3d>).
+- *Wolfenstein 3D* engine (c) id Software; Sega Genesis port built on [wolf-3d-md](https://github.com/haroldo-ok/wolf-3d-md).
+- *Akai Koudan Zillion* characters, art, and music (c) Sega / Tatsunoko.
+- Non-commercial fan port; none of the rights holders were involved in this project.
